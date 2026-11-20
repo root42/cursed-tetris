@@ -244,7 +244,12 @@ int main(void)
 
     signal(SIGINT, signal_handler);
     signal(SIGTERM, signal_handler);
+    /* SIGWINCH is a non-POSIX extension (hidden on macOS in strict
+     * POSIX mode); its default action is ignore anyway, and the
+     * terminal size is only checked once at startup. */
+#ifdef SIGWINCH
     signal(SIGWINCH, SIG_IGN);
+#endif
 
     int height, width;
     getmaxyx(stdscr, height, width);
